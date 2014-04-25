@@ -22,7 +22,9 @@ public class Logic {
 	static JFileChooser browse;
 	static SourceDataLine audioSource;
 	static int BUFFER_SIZE;
-
+	static int click=1;
+	static File file;
+	
 	static JFrame window;
 	static JPanel player;
 	static JButton play;
@@ -76,7 +78,7 @@ public class Logic {
 
 		if (ret == JFileChooser.APPROVE_OPTION) {
 			// File browser to get the file
-			File file = browse.getSelectedFile();
+			 file = browse.getSelectedFile();
 			System.out.println("Opening: " + file.getName());
 
 			// Creates an audio stream
@@ -112,5 +114,49 @@ public class Logic {
 		} else {
 			System.out.println("Open command cancelled by user.");
 		}
+	}
+	
+	public static void pause_play() throws LineUnavailableException {
+		// Creates an audio stream
+		//File file=new File("2.wav");
+		AudioInputStream stream = null;
+		try {
+			stream = AudioSystem.getAudioInputStream(file);
+			AudioFormat audioFormat = stream.getFormat();
+			DataLine.Info info = new DataLine.Info(SourceDataLine.class,
+					audioFormat);
+
+			// Adds the stream to the source data line
+
+			audioSource = (SourceDataLine) AudioSystem.getLine(info);
+			audioSource.open(audioFormat);
+
+			audioSource.start();
+
+			// Reads the dataline in buffer of length BUFFER_SIZE
+			int readBytes = 0;
+			BUFFER_SIZE = audioSource.getBufferSize();
+			byte[] audioBuffer = new byte[BUFFER_SIZE];
+
+			while (readBytes != -1) {
+				readBytes = stream.read(audioBuffer, 0, audioBuffer.length);
+				if (readBytes >= 0) {
+					audioSource.write(audioBuffer, 0, readBytes);
+				}
+			}
+
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		audioSource.drain();
+		audioSource.stop();
+		audioSource.close();
+
+		
 	}
 }
