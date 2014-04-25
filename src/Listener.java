@@ -21,32 +21,26 @@ public class Listener {
 	public static void openListener() {
 		GraphicalInterface.open.addMouseListener(new MouseListener() {
 
-			@Override
 			public void mouseReleased(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mousePressed(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseExited(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseEntered(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
 				Thread thread = new Thread(new Runnable() {
 
-					@Override
 					public void run() {
 						try {
 							Logic.openFile();
@@ -77,32 +71,26 @@ public class Listener {
 	public static void stopListener() {
 		GraphicalInterface.stop.addMouseListener(new MouseListener() {
 
-			@Override
 			public void mouseReleased(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mousePressed(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseExited(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseEntered(MouseEvent arg0) {
 
 			}
 
-			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
 				Thread thread = new Thread(new Runnable() {
 
-					@Override
 					public void run() {
 
 						Logic.stopSong();
@@ -116,4 +104,63 @@ public class Listener {
 
 	}
 
+	public static void pauseListener() {
+		// TODO Auto-generated method stub
+		GraphicalInterface.pause.addMouseListener(new MouseListener() {
+			
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				Thread thread = new Thread(new Runnable() {
+
+					public void run() {
+				Logic.click++;
+				
+				if(Logic.click%2==0)
+				{
+					Logic.stopSong();
+					GraphicalInterface.pause.setText("Play");
+				}
+				if(Logic.click%2!=0)
+				{
+					
+					try {
+						Logic.pause_play();
+						GraphicalInterface.pause.setText("Pause");
+					} catch (LineUnavailableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				System.out.println("click count :"+Logic.click);
+					}
+				});
+
+				thread.start();
+			}
+
+				
+			
+		});
+			}
 }
+
